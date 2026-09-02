@@ -8,6 +8,28 @@ const fs = require("fs"), path = require("path");
 const SITE = path.resolve(__dirname, "..");
 const cfg = JSON.parse(fs.readFileSync(path.join(SITE, "site.config.json"), "utf8"));
 const BASE = cfg.baseUrl.replace(/\/?$/, "/");
+const EXTRACT = process.argv.includes("--extract");
+const LANGS = cfg.languages || {};                       // { zh: { lang, path, label, switchLabel, business, pages } }
+const DICT = {}, MISSING = {};
+for (const code of Object.keys(LANGS)) {
+  const f = path.join(SITE, "i18n", code + ".json");
+  DICT[code] = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, "utf8")) : {};
+  MISSING[code] = new Map();
+}
+const TRANSLATABLE_ATTRS = ["alt", "placeholder", "aria-label", "title", "data-done", "data-name"];
+function lookup(code, text) {
+  const t = text.trim();
+  if (!t || !/[A-Za-z]/.test(t)) return text;                       // numbers, symbols, stars
+  const v = DICT[code][t];
+  if (v) return text.replace(t, v);
+  if (!MISSING[code].has(t)) MISSING[code].set(t, "");
+  return text;
+}
+function translateHtml(html, code) {
+  html = html.replace(/>([^<]+)</g, (m, txt) => ">" + lookup(code, txt) + "<");
+  html = html.replace(new RegExp("\\s(" + TRANSLATABLE_ATTRS.join("|") + ')="([^"]*)"', "g"), (m, a, v) => " " + a + '="' + lookup(code, v) + '"');
+  return html;
+}
 const today = new Date().toISOString().slice(0, 10);
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -98,10 +120,11 @@ function faqSchema(html) {
   if (!qs.length) return null;
   return { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: qs.map(m => ({ "@type": "Question", name: m[1].trim(), acceptedAnswer: { "@type": "Answer", text: m[2].trim() } })) };
 }
-function businessSchema() {
+function businessSchema(L) {
+  const bz = Object.assign({}, cfg, (L && L.business) || {});
   const b = {
     "@context": "https://schema.org", "@type": "HomeAndConstructionBusiness", "@id": BASE + "#business",
-    name: cfg.name, alternateName: cfg.alternateName, description: cfg.description, url: BASE,
+    name: bz.name, alternateName: bz.alternateName, description: bz.description, url: BASE + ((L && L.path) || ""),
     telephone: cfg.telephone, email: cfg.email, image: BASE + cfg.ogImage, logo: BASE + "assets/logo-primary.svg", priceRange: "$$",
     address: { "@type": "PostalAddress", addressLocality: cfg.address.locality, addressRegion: cfg.address.region, addressCountry: cfg.address.country },
     areaServed: cfg.areasServed.map(n => ({ "@type": n.includes("Shire") ? "AdministrativeArea" : "City", name: n })),
@@ -116,17 +139,21 @@ function businessSchema() {
   return b;
 }
 const BIZ_JSON = JSON.stringify(businessSchema());
+const BIZ_JSON_L = Object.fromEntries(Object.entries(LANGS).map(([c, L]) => [c, JSON.stringify(businessSchema(L))]));
 
-function buildPage(name, pg) {
+function buildPage(name, pg, code) {
+  const L = code ? LANGS[code] : null;
+  const outPath = (L ? L.path : "") + pg.path;                       // e.g. "zh/about/"
+  const meta = L ? Object.assign({}, pg, (L.pages && L.pages[name]) || {}) : pg;
   const src = fs.readFileSync(path.join(SITE, name + ".dc.html"), "utf8");
-  const rel = pg.path ? "../".repeat(pg.path.split("/").filter(Boolean).length) : "";
+  const rel = outPath ? "../".repeat(outPath.split("/").filter(Boolean).length) : "";
   const helmet = /<helmet>([\s\S]*?)<\/helmet>/.exec(src)[1];
   const baseStyle = /<style>([\s\S]*?)<\/style>/.exec(helmet)[1];
   const fontLinks = [...helmet.matchAll(/<link[^>]*fonts\.g[^>]*>/g)].map(m => m[0]).join("\n");
   const script = /<script type="text\/x-dc"[^>]*>([\s\S]*?)<\/script>/.exec(src)[1];
   let body = /<x-dc>([\s\S]*?)<\/x-dc>/.exec(src)[1].replace(/<helmet>[\s\S]*?<\/helmet>/, "");
 
-  const vals = evalVals(script, pg.title);
+  const vals = evalVals(script, meta.title);
   body = expand(body, vals);
   body = body.replace(/\s+on[A-Z]\w*="[^"]*"/g, "");                   // React-style handlers
   body = body.replace(/\s+hint-placeholder-\w+="[^"]*"/g, "");
@@ -138,58 +165,86 @@ function buildPage(name, pg) {
   }
   const left = body.match(/\{\{[^}]*\}\}/g); if (left) console.warn("  ! unresolved:", left.slice(0, 5));
 
-  const url = urlFor(pg.path), faq = faqSchema(body);
+  // language switcher: EN pages point at the first configured language, translated pages point back to EN
+  const first = Object.entries(LANGS)[0];
+  if (first) {
+    const [fc, FL] = first;
+    const target = L ? rel + pg.path : rel + FL.path + pg.path;
+    const label = L ? (L.switchLabel || "EN") : FL.label, hl = L ? "en-AU" : FL.lang, aria = L ? "English version" : (FL.switchAria || FL.label);
+    body = body.replace(/<a class="(lang-switch[^"]*)"([^>]*?)href="[^"]*"([^>]*?)hreflang="[^"]*" lang="[^"]*" aria-label="[^"]*"([^>]*)>[^<]*<\/a>/,
+      '<a class="$1"$2href="' + (target || "./") + '"$3hreflang="' + hl + '" lang="' + hl + '" aria-label="' + aria + '"$4>' + label + "</a>");
+  }
+  if (L) body = translateHtml(body, code);
+
+  const url = urlFor(outPath), faq = faqSchema(body);
+  const alternates = ['<link rel="alternate" hreflang="en-AU" href="' + urlFor(pg.path) + '">', '<link rel="alternate" hreflang="x-default" href="' + urlFor(pg.path) + '">']
+    .concat(Object.values(LANGS).map(X => '<link rel="alternate" hreflang="' + X.lang + '" href="' + urlFor(X.path + pg.path) + '">')).join("\n");
   const h1 = (/<h1[^>]*>([\s\S]*?)<\/h1>/.exec(body) || [])[1];
   const head = `<!DOCTYPE html>
-<html lang="en-AU">
+<html lang="${L ? L.lang : "en-AU"}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(pg.title)}</title>
-<meta name="description" content="${esc(pg.description)}">
+<title>${esc(meta.title)}</title>
+<meta name="description" content="${esc(meta.description)}">
 <link rel="canonical" href="${url}">
+${alternates}
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:type" content="${pg.path ? "website" : "website"}">
 <meta property="og:site_name" content="${esc(cfg.name)}">
-<meta property="og:locale" content="en_AU">
-<meta property="og:title" content="${esc(pg.title)}">
-<meta property="og:description" content="${esc(pg.description)}">
+<meta property="og:locale" content="${L ? L.ogLocale || "zh_CN" : "en_AU"}">
+<meta property="og:title" content="${esc(meta.title)}">
+<meta property="og:description" content="${esc(meta.description)}">
 <meta property="og:url" content="${url}">
 <meta property="og:image" content="${BASE + cfg.ogImage}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="${esc(pg.title)}">
-<meta name="twitter:description" content="${esc(pg.description)}">
+<meta name="twitter:title" content="${esc(meta.title)}">
+<meta name="twitter:description" content="${esc(meta.description)}">
 <meta name="twitter:image" content="${BASE + cfg.ogImage}">
 <meta name="geo.region" content="AU-NSW">
 <meta name="geo.placename" content="Western Sydney">
 <link rel="icon" href="${rel}assets/mark.svg">
-${fontLinks}
+${fontLinks}${L && L.fontLink ? "\n" + L.fontLink : ""}
 <link rel="stylesheet" href="${rel}assets/responsive.css">
 <style>${baseStyle.replace(/url\("assets\//g, 'url("' + rel + 'assets/')}
 [hidden]{display:none !important}
 ${ps.css}
 </style>
-<script type="application/ld+json">${BIZ_JSON}</script>
+<script type="application/ld+json">${L ? BIZ_JSON_L[code] : BIZ_JSON}</script>
 ${faq ? '<script type="application/ld+json">' + JSON.stringify(faq) + "</script>\n" : ""}<script src="${rel}site.js" defer></script>
 </head>
 <body>
 <!-- Generated by tools/build.js from ${name}.dc.html — edit the source, not this file. -->
 `;
   const out = head + body.trim() + "\n</body>\n</html>\n";
-  const dir = path.join(SITE, pg.path); fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(dir, "index.html"), out);
-  console.log(`✓ ${pg.path || "/"}  ${out.length} bytes  h1="${h1 && h1.replace(/<[^>]+>/g, "")}"  faq=${faq ? faq.mainEntity.length : 0}`);
-  return { url, name };
+  const dir = path.join(SITE, outPath); fs.mkdirSync(dir, { recursive: true });
+  if (!EXTRACT) fs.writeFileSync(path.join(dir, "index.html"), out);
+  console.log(`✓ ${outPath || "/"}  ${out.length} bytes  h1="${h1 && h1.replace(/<[^>]+>/g, "")}"  faq=${faq ? faq.mainEntity.length : 0}`);
+  return { url, name, path: pg.path, code };
 }
 
 /* ---------- 5. run ---------- */
 const built = pages.map(([n, p]) => buildPage(n, p));
+for (const code of Object.keys(LANGS)) pages.forEach(([n, p]) => built.push(buildPage(n, p, code)));
 
+for (const code of Object.keys(LANGS)) {
+  const miss = MISSING[code];
+  if (EXTRACT) {
+    const f = path.join(SITE, "i18n", code + ".json"); fs.mkdirSync(path.dirname(f), { recursive: true });
+    const merged = Object.assign({}, DICT[code]); for (const k of miss.keys()) if (!(k in merged)) merged[k] = "";
+    fs.writeFileSync(f, JSON.stringify(merged, null, 2) + "\n");
+    console.log(`→ i18n/${code}.json: ${Object.keys(merged).length} strings, ${[...miss.keys()].length} new`);
+  } else if (miss.size) console.warn(`  ! ${code}: ${miss.size} untranslated strings (shown in English). Run: node tools/build.js --extract`);
+}
+if (EXTRACT) process.exit(0);
+
+const altLinks = b => ['<xhtml:link rel="alternate" hreflang="en-AU" href="' + urlFor(b.path) + '"/>', '<xhtml:link rel="alternate" hreflang="x-default" href="' + urlFor(b.path) + '"/>']
+  .concat(Object.values(LANGS).map(X => '<xhtml:link rel="alternate" hreflang="' + X.lang + '" href="' + urlFor(X.path + b.path) + '"/>')).join("");
 fs.writeFileSync(path.join(SITE, "sitemap.xml"),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-  built.map(b => `  <url><loc>${b.url}</loc><lastmod>${today}</lastmod><changefreq>${b.name === "Home" ? "weekly" : "monthly"}</changefreq><priority>${b.name === "Home" ? "1.0" : b.name === "services" || b.name === "contact" ? "0.9" : "0.7"}</priority></url>`).join("\n") +
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n` +
+  built.map(b => `  <url><loc>${b.url}</loc><lastmod>${today}</lastmod><changefreq>${b.name === "Home" ? "weekly" : "monthly"}</changefreq><priority>${b.name === "Home" ? "1.0" : b.name === "services" || b.name === "contact" ? "0.9" : "0.7"}</priority>${altLinks(b)}</url>`).join("\n") +
   `\n</urlset>\n`);
 
 fs.writeFileSync(path.join(SITE, "robots.txt"),
@@ -237,7 +292,8 @@ Priced by the job, not the hour. Free on-site visit, then a written quote; no ca
 Phone ${cfg.telephoneDisplay} (${hours}) · ${cfg.email} · ${BASE}contact/
 
 ## Pages
-${built.map(b => "- " + b.url).join("\n")}
+${built.filter(b => !b.code).map(b => "- " + b.url).join("\n")}
+${Object.entries(LANGS).map(([c, X]) => "\n## " + X.label + " (" + X.lang + ")\n" + built.filter(b => b.code === c).map(b => "- " + b.url).join("\n")).join("\n")}
 `);
 fs.writeFileSync(path.join(SITE, "..", ".nojekyll"), "");
 console.log("✓ sitemap.xml, robots.txt, llms.txt, .nojekyll");

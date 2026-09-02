@@ -27,3 +27,12 @@ Phone 0400 123 456 (Mon–Fri 07:00–17:00) · info@johnsonpropertysolutions.co
 - https://timllz-huang.github.io/JohnsonHandyman/site/reviews/
 - https://timllz-huang.github.io/JohnsonHandyman/site/faq/
 - https://timllz-huang.github.io/JohnsonHandyman/site/contact/
+
+## 中文 (zh-Hans)
+- https://timllz-huang.github.io/JohnsonHandyman/site/zh/
+- https://timllz-huang.github.io/JohnsonHandyman/site/zh/about/
+- https://timllz-huang.github.io/JohnsonHandyman/site/zh/services/
+- https://timllz-huang.github.io/JohnsonHandyman/site/zh/projects/
+- https://timllz-huang.github.io/JohnsonHandyman/site/zh/reviews/
+- https://timllz-huang.github.io/JohnsonHandyman/site/zh/faq/
+- https://timllz-huang.github.io/JohnsonHandyman/site/zh/contact/

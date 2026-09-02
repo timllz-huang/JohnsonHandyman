@@ -11,6 +11,14 @@ Static site with a small build step.
 - `site.js` — the only JavaScript the built pages load (menu, dropdown, area picker, project filters, forms).
 - `assets/responsive.css` — mobile/tablet layer (see below). `assets/og-image.jpg` — social share image.
 
+## Languages
+The Chinese site lives at `/zh/` and is generated from the same sources. `i18n/zh.json` maps every English string
+(text and alt/placeholder/aria attributes) to its translation; page titles/descriptions are under `languages.zh.pages`
+in `site.config.json`. After changing copy in a `.dc.html` source, run `node tools/build.js --extract` to add the new
+English strings to `i18n/zh.json`, translate them, then `node tools/build.js`. Untranslated strings fall back to English
+and are listed in the build output. To add another language (e.g. Traditional Chinese), add a `languages.zh-hant` block
+to the config and an `i18n/zh-hant.json` file — the build, switcher, hreflang tags and sitemap pick it up automatically.
+
 When the domain is live, change `baseUrl` in `site.config.json`, rebuild, and set the custom domain in GitHub Pages.
 
 ## Layout

@@ -11,11 +11,12 @@ img,svg,video{max-width:100%}
 /* ---------- Tablet & below ---------- */
 @media (max-width:900px){
   /* Header: logo | Quote | hamburger, mobile menu drops below */
-  .nav-grid{grid-template-columns:1fr auto auto !important;gap:12px !important}
+  .nav-grid{grid-template-columns:1fr auto auto auto !important;gap:10px !important}
   .nav-desktop{display:none !important}
   .nav-toggle{display:inline-flex !important}
   .more-wrap{display:none !important}
-  .nav-cta{padding:8px 16px !important}
+  .nav-cta{padding:8px 14px !important}
+  .lang-switch{padding:7px 10px !important}
   .nav-mobile:not([hidden]){display:flex !important;grid-column:1 / -1}
   .nav-mobile .m-link{padding:14px 4px;font-size:18px;border-bottom:1px solid #EFE9E0}
   .nav-mobile .m-actions{display:flex;gap:12px;padding-top:16px}
@@ -71,6 +72,11 @@ img,svg,video{max-width:100%}
   h1[style*="clamp"]{font-size:32px !important}
   .stars svg{width:20px;height:20px}
 }
+
+/* Chinese pages: CJK-capable fallbacks, no negative tracking on headings */
+html[lang^="zh"] body,html[lang^="zh"] button,html[lang^="zh"] input,html[lang^="zh"] select,html[lang^="zh"] textarea{font-family:"Source Sans 3","Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+html[lang^="zh"] h1,html[lang^="zh"] h2,html[lang^="zh"] h3,html[lang^="zh"] h4{font-family:"Bricolage Grotesque","Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;letter-spacing:0 !important;line-height:1.25 !important}
+html[lang^="zh"] [style*="text-transform:uppercase"]{letter-spacing:.08em !important}
 
 /* Touch devices: no sticky hover colour on buttons */
 @media (hover:none){

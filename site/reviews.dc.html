@@ -32,7 +32,7 @@ input::placeholder{color:#5D564E}
 
 <!-- NAVBAR · scheme-2 -->
 <header data-screen-label="Navbar" style="background:#FAF7F2;color:#2A2724;position:sticky;top:0;z-index:999">
-  <div class="nav-grid" style="max-width:1280px;margin:0 auto;padding:0 5%;min-height:72px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px">
+  <div class="nav-grid" style="max-width:1280px;margin:0 auto;padding:0 5%;min-height:72px;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:16px">
     <a href="Home.dc.html" style="display:flex;align-items:center" aria-label="Johnson Property Solutions home">
       <img src="assets/logo-primary.svg" alt="Johnson Property Solutions" style="height:44px;width:auto;display:block">
     </a>
@@ -54,6 +54,7 @@ input::placeholder{color:#5D564E}
         </sc-if>
       </div>
     </nav>
+    <a class="lang-switch" href="zh/" hreflang="zh-Hans" lang="zh-Hans" aria-label="中文版" style="display:inline-flex;align-items:center;justify-content:center;padding:7px 12px;border-radius:12px;border:1px solid #E2D9CD;background:#FFFFFF;color:#1E3B2C;font-size:14px;font-weight:600;white-space:nowrap" style-hover="background:#EDF1ED">中文</a>
     <a class="nav-cta" href="contact.dc.html" style="display:inline-flex;align-items:center;justify-content:center;padding:8px 24px;border-radius:12px;background:#1E3B2C;color:#FFFFFF;font-weight:500;border:1px solid transparent;transition:all .2s" style-hover="background:#2F5943;border-color:#2F5943;color:#FFFFFF">Quote</a>
     <button class="nav-toggle" onClick="{{ toggleMenu }}" aria-label="{{ menuLabel }}" aria-expanded="{{ menuOpen }}" style="display:none;align-items:center;justify-content:center;width:44px;height:44px;padding:0;background:#FFFFFF;border:1px solid #E2D9CD;border-radius:12px;cursor:pointer;color:#1E3B2C">
       <sc-if value="{{ menuClosed }}" hint-placeholder-val="{{ true }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></sc-if>

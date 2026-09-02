@@ -8,20 +8,114 @@
   "telephoneDisplay": "0400 123 456",
   "email": "info@johnsonpropertysolutions.com.au",
   "formMailTo": "timllz83@gmail.com",
-  "address": { "locality": "Penrith", "region": "NSW", "postcode": "", "country": "AU" },
-  "areasServed": ["Penrith", "Blacktown", "Parramatta", "The Hills Shire"],
-  "openingHours": [{ "days": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "07:00", "closes": "17:00" }],
+  "address": {
+    "locality": "Penrith",
+    "region": "NSW",
+    "postcode": "",
+    "country": "AU"
+  },
+  "areasServed": [
+    "Penrith",
+    "Blacktown",
+    "Parramatta",
+    "The Hills Shire"
+  ],
+  "openingHours": [
+    {
+      "days": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "07:00",
+      "closes": "17:00"
+    }
+  ],
   "licence": "",
   "abn": "",
   "sameAs": [],
   "ogImage": "assets/og-image.jpg",
   "pages": {
-    "Home":     { "path": "",          "title": "Handyman & Carpenter Western Sydney | Johnson Property Solutions", "description": "Family-owned handyman and small-build team in Western Sydney. Decks, bathrooms, room additions and home repairs across Penrith, Blacktown and Parramatta. Free written quotes." },
-    "about":    { "path": "about/",    "title": "About the Johnson Family | Handyman & Builders, Penrith", "description": "Two generations of Johnson tradesmen, fully insured, doing careful, tidy work across Western Sydney. Meet the family and see how we work." },
-    "services": { "path": "services/", "title": "Handyman Services Western Sydney: Decks, Bathrooms, Repairs", "description": "One family team for big jobs and small fixes: decking and carpentry, bathroom renovations, room additions, minor plumbing and home care repairs. Penrith to Parramatta." },
-    "projects": { "path": "projects/", "title": "Our Work: Decks, Bathrooms & Renovations in Western Sydney", "description": "Real jobs from real homes: timber decks in Penrith, bathroom refits in Blacktown, granny flat conversions in Parramatta. Photos from the Johnson team." },
-    "reviews":  { "path": "reviews/",  "title": "Johnson Property Solutions Reviews | Western Sydney Handyman", "description": "What Penrith, Blacktown and Parramatta homeowners say about working with the Johnson family: tidy work, straight talk, and prices that match the quote." },
-    "faq":      { "path": "faq/",      "title": "Handyman FAQs: Quotes, Insurance, Timelines | Johnson Property", "description": "Straight answers on free quotes, insurance, deck and bathroom timelines, payment and aftercare from a Western Sydney family handyman team." },
-    "contact":  { "path": "contact/",  "title": "Get a Free Handyman Quote in Western Sydney | Johnson Property", "description": "Call or send the job details and one of the family will call back within one business day. Free on-site quotes across Penrith, Blacktown, Parramatta and The Hills." }
+    "Home": {
+      "path": "",
+      "title": "Handyman & Carpenter Western Sydney | Johnson Property Solutions",
+      "description": "Family-owned handyman and small-build team in Western Sydney. Decks, bathrooms, room additions and home repairs across Penrith, Blacktown and Parramatta. Free written quotes."
+    },
+    "about": {
+      "path": "about/",
+      "title": "About the Johnson Family | Handyman & Builders, Penrith",
+      "description": "Two generations of Johnson tradesmen, fully insured, doing careful, tidy work across Western Sydney. Meet the family and see how we work."
+    },
+    "services": {
+      "path": "services/",
+      "title": "Handyman Services Western Sydney: Decks, Bathrooms, Repairs",
+      "description": "One family team for big jobs and small fixes: decking and carpentry, bathroom renovations, room additions, minor plumbing and home care repairs. Penrith to Parramatta."
+    },
+    "projects": {
+      "path": "projects/",
+      "title": "Our Work: Decks, Bathrooms & Renovations in Western Sydney",
+      "description": "Real jobs from real homes: timber decks in Penrith, bathroom refits in Blacktown, granny flat conversions in Parramatta. Photos from the Johnson team."
+    },
+    "reviews": {
+      "path": "reviews/",
+      "title": "Johnson Property Solutions Reviews | Western Sydney Handyman",
+      "description": "What Penrith, Blacktown and Parramatta homeowners say about working with the Johnson family: tidy work, straight talk, and prices that match the quote."
+    },
+    "faq": {
+      "path": "faq/",
+      "title": "Handyman FAQs: Quotes, Insurance, Timelines | Johnson Property",
+      "description": "Straight answers on free quotes, insurance, deck and bathroom timelines, payment and aftercare from a Western Sydney family handyman team."
+    },
+    "contact": {
+      "path": "contact/",
+      "title": "Get a Free Handyman Quote in Western Sydney | Johnson Property",
+      "description": "Call or send the job details and one of the family will call back within one business day. Free on-site quotes across Penrith, Blacktown, Parramatta and The Hills."
+    }
+  },
+  "languages": {
+    "zh": {
+      "lang": "zh-Hans",
+      "path": "zh/",
+      "label": "中文",
+      "switchLabel": "EN",
+      "switchAria": "中文版",
+      "ogLocale": "zh_CN",
+      "fontLink": "<link href=\"https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;600;700&display=swap\" rel=\"stylesheet\">",
+      "business": {
+        "description": "Johnson Property Solutions 是一家位于西悉尼的家族经营杂工与小型建筑公司。两代工匠承接木工与露台、浴室翻新、加建与改造、小型水管维修以及日常家居维修，服务范围覆盖 Penrith、Blacktown、Parramatta 和 The Hills 地区。"
+      },
+      "pages": {
+        "Home": {
+          "title": "西悉尼家庭杂工与木工 | Johnson Property Solutions",
+          "description": "西悉尼家族经营的杂工与小型建筑团队。承接露台、浴室、加建改造与家居维修，服务 Penrith、Blacktown、Parramatta 等地区。免费书面报价。"
+        },
+        "about": {
+          "title": "关于 Johnson 家族 | 西悉尼杂工与建筑团队",
+          "description": "两代 Johnson 工匠，投保齐全，在西悉尼以细致、整洁的施工著称。认识我们的家族，了解我们的工作方式。"
+        },
+        "services": {
+          "title": "西悉尼杂工服务：露台、浴室、家居维修",
+          "description": "大工程与小修小补由同一个家族团队完成：露台与木工、浴室翻新、加建改造、小型水管维修以及家居保养维修。服务 Penrith 至 Parramatta。"
+        },
+        "projects": {
+          "title": "工程案例：西悉尼露台、浴室与翻新",
+          "description": "真实住宅的真实工程：Penrith 的木露台、Blacktown 的浴室翻新、Parramatta 的祖母屋改造。Johnson 团队的施工照片。"
+        },
+        "reviews": {
+          "title": "Johnson Property Solutions 客户评价 | 西悉尼杂工",
+          "description": "Penrith、Blacktown 和 Parramatta 的业主如何评价与 Johnson 家族合作：施工整洁、沟通直接、价格与报价一致。"
+        },
+        "faq": {
+          "title": "杂工常见问题：报价、保险、工期 | Johnson Property",
+          "description": "关于免费报价、保险、露台与浴室工期、付款方式和售后保养的直接解答，来自西悉尼的家族杂工团队。"
+        },
+        "contact": {
+          "title": "西悉尼免费杂工报价 | Johnson Property",
+          "description": "来电或发送工程详情，家族成员将在一个工作日内回电。Penrith、Blacktown、Parramatta 和 The Hills 地区免费上门报价。"
+        }
+      }
+    }
   }
 }

@@ -7,6 +7,8 @@
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var cfg = window.__SITE || {};
   var MAIL_TO = window.__MAIL_TO || cfg.formMailTo || "timllz83@gmail.com";
+  var ZH = /^zh/i.test(document.documentElement.lang);
+  var T = ZH ? { open: "打开菜单", close: "关闭菜单", area: " 服务区域", sent: "已发送" } : { open: "Open menu", close: "Close menu", area: " service area", sent: "Sent" };
 
   /* Mobile menu */
   var toggle = $(".nav-toggle"), mobile = $(".nav-mobile");
@@ -15,7 +17,7 @@
       var open = mobile.hasAttribute("hidden");
       mobile.toggleAttribute("hidden", !open);
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      toggle.setAttribute("aria-label", open ? T.close : T.open);
       var ic = $$("svg", toggle); if (ic.length === 2) { ic[0].toggleAttribute("hidden", open); ic[1].toggleAttribute("hidden", !open); }
     });
   }
@@ -42,7 +44,7 @@
         locBtns.forEach(function (o) { o.style.borderLeftColor = "#E2D9CD"; o.setAttribute("aria-pressed", "false"); });
         b.style.borderLeftColor = "#1E3B2C"; b.setAttribute("aria-pressed", "true");
         if (b.dataset.img) { locImg.src = b.dataset.img; locImg.removeAttribute("srcset"); }
-        if (b.dataset.name) locImg.alt = b.dataset.name + " service area";
+        if (b.dataset.name) locImg.alt = b.dataset.name + T.area;
       });
     });
   }
@@ -84,7 +86,7 @@
       }
       var emailInput = $("input[type=email]", form); if (emailInput) fields.email = emailInput.value;
       sendMail(kind === "news" ? "Newsletter signup" : "Quote request — " + document.title, fields);
-      if (btn) { btn.textContent = btn.dataset.done || "Sent"; btn.disabled = true; }
+      if (btn) { btn.textContent = btn.dataset.done || T.sent; btn.disabled = true; }
     });
   });
 
