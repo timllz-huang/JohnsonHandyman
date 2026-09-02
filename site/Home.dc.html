@@ -10,6 +10,8 @@
 <helmet>
 <title>Johnson Property Solutions — One family for every job at home</title>
 <link rel="icon" href="assets/mark.svg">
+<link rel="canonical" href="https://timllz-huang.github.io/JohnsonHandyman/site/">
+<meta name="robots" content="noindex,follow">
 <link rel="stylesheet" href="assets/responsive.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,13 +40,13 @@ input::placeholder{color:#5D564E}
       <a href="about.dc.html" style="padding:8px 16px;font-size:16px">About</a>
       <a href="services.dc.html" style="padding:8px 16px;font-size:16px">Services</a>
       <a href="projects.dc.html" style="padding:8px 16px;font-size:16px">Projects</a>
-      <div style="position:relative" onMouseEnter="{{ openMore }}" onMouseLeave="{{ closeMore }}">
-        <button onClick="{{ openMore }}" aria-haspopup="true" aria-expanded="{{ moreOpen }}" style="display:flex;align-items:center;gap:8px;padding:8px 16px;background:none;border:0;cursor:pointer;color:#2A2724;font-size:16px">
+      <div class="more-wrap" style="position:relative" onMouseEnter="{{ openMore }}" onMouseLeave="{{ closeMore }}">
+        <button class="more-btn" onClick="{{ openMore }}" aria-haspopup="true" aria-expanded="{{ moreOpen }}" style="display:flex;align-items:center;gap:8px;padding:8px 16px;background:none;border:0;cursor:pointer;color:#2A2724;font-size:16px">
           <span>More</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition:transform .3s;transform:{{ moreIconTransform }}"><path d="M6 9l6 6 6-6"></path></svg>
         </button>
         <sc-if value="{{ moreOpen }}" hint-placeholder-val="{{ false }}">
-          <div style="position:absolute;top:100%;left:0;background:#FAF7F2;border:1px solid #E2D9CD;border-radius:12px;padding:8px;min-width:180px;display:flex;flex-direction:column">
+          <div class="more-menu" style="position:absolute;top:100%;left:0;background:#FAF7F2;border:1px solid #E2D9CD;border-radius:12px;padding:8px;min-width:180px;display:flex;flex-direction:column">
             <a href="reviews.dc.html" style="display:block;padding:8px 16px;font-size:16px;border-radius:8px" style-hover="background:#FFFFFF">Reviews</a>
             <a href="faq.dc.html" style="display:block;padding:8px 16px;font-size:16px;border-radius:8px" style-hover="background:#FFFFFF">FAQ</a>
             <a href="contact.dc.html" style="display:block;padding:8px 16px;font-size:16px;border-radius:8px" style-hover="background:#FFFFFF">Contact</a>
@@ -79,7 +81,8 @@ input::placeholder{color:#5D564E}
   <div style="position:relative;max-width:1280px;margin:0 auto;border-radius:16px;overflow:hidden">
     <div class="hero-inner" style="position:relative;z-index:1;min-height:640px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px;text-align:center;color:#FFFFFF">
       <div style="max-width:768px">
-        <h1 style="font-size:clamp(44px,6vw,72px);line-height:1.2;margin-bottom:24px;color:#FFFFFF;font-weight:700">One family for every job at home</h1>
+        <p style="font-weight:600;margin-bottom:16px;color:#FFFFFF;letter-spacing:.04em;text-transform:uppercase;font-size:14px">One family for every job at home</p>
+        <h1 style="font-size:clamp(44px,6vw,72px);line-height:1.2;margin-bottom:24px;color:#FFFFFF;font-weight:700">Family handyman and small builds across Western Sydney</h1>
         <p style="font-size:18px;color:#FFFFFF">Two generations of Johnson tradesmen doing careful, tidy work across Western Sydney. No chasing contractors, no half-finished jobs.</p>
       </div>
       <div class="btn-row" style="margin-top:32px;display:flex;flex-wrap:wrap;gap:16px;justify-content:center">
@@ -98,6 +101,7 @@ input::placeholder{color:#5D564E}
 <section data-screen-label="Trust bar" style="background:#FFFFFF;padding:80px 5%;overflow:hidden">
   <div style="max-width:768px;margin:0 auto 48px;text-align:center">
     <h2 style="font-size:22px;line-height:1.4">Skilled, insured, and family owned since day one</h2>
+    <p style="margin-top:16px">Johnson Property Solutions is a family-owned handyman and small-build business based in Western Sydney. Two generations of tradesmen handle carpentry and decking, bathroom renovations, room additions and conversions, minor plumbing and everyday home repairs across Penrith, Blacktown, Parramatta and The Hills — with a free written quote before any work starts.</p>
   </div>
   <div style="max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;gap:16px 40px">
     <div style="display:flex;align-items:center;gap:12px;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:20px;color:#1E3B2C"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1E3B2C" stroke-width="2"><path d="M14.7 6.3a4 4 0 0 0 5 5L12 19l-7-7 7.7-5.7z"></path><path d="M3 21l6-6"></path></svg>Skilled</div>
@@ -248,7 +252,7 @@ input::placeholder{color:#5D564E}
     <div class="g2" style="display:grid;grid-template-columns:minmax(260px,.5fr) 1fr;gap:64px 80px;align-items:start">
       <div style="display:grid;gap:0">
         <sc-for list="{{ areas }}" as="a" hint-placeholder-count="3">
-          <button class="loc-btn" onClick="{{ a.select }}" style="text-align:left;background:none;border:0;border-left:3px solid {{ a.border }};padding:20px 0 20px 32px;cursor:pointer;color:#2A2724;transition:border-color .2s">
+          <button class="loc-btn" type="button" data-img="{{ a.img }}" data-name="{{ a.name }}" onClick="{{ a.select }}" style="text-align:left;background:none;border:0;border-left:3px solid {{ a.border }};padding:20px 0 20px 32px;cursor:pointer;color:#2A2724;transition:border-color .2s">
             <h3 style="font-size:28px;line-height:1.4;margin-bottom:16px">{{ a.name }}</h3>
             <p>{{ a.desc }}</p>
             <p style="font-weight:600;margin-top:24px">View area</p>
@@ -256,7 +260,7 @@ input::placeholder{color:#5D564E}
         </sc-for>
       </div>
       <div style="overflow:hidden;border-radius:16px">
-        <img src="{{ activeAreaImg }}" alt="{{ activeAreaName }}" style="width:100%;aspect-ratio:3/2;object-fit:cover;display:block" loading="lazy" decoding="async">
+        <img class="loc-img" src="{{ activeAreaImg }}" alt="{{ activeAreaName }} service area" style="width:100%;aspect-ratio:3/2;object-fit:cover;display:block" loading="lazy" decoding="async">
       </div>
     </div>
   </div>
@@ -275,7 +279,7 @@ input::placeholder{color:#5D564E}
     <div style="display:grid;gap:48px">
       <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="5">
         <div>
-          <p style="font-size:18px;font-weight:600;margin-bottom:16px">{{ f.q }}</p>
+          <h3 style="font-family:'Source Sans 3',sans-serif;font-size:18px;font-weight:600;color:#2A2724;letter-spacing:0;line-height:1.5;margin-bottom:16px">{{ f.q }}</h3>
           <p>{{ f.a }}</p>
         </div>
       </sc-for>
@@ -291,9 +295,9 @@ input::placeholder{color:#5D564E}
         <h2 style="font-size:clamp(40px,4vw,52px);line-height:1.2;margin-bottom:24px">Get your free quote today</h2>
         <p style="font-size:18px">Tell us what needs doing and we will get back to you with a clear price</p>
         <div style="margin-top:32px;max-width:480px">
-          <form class="email-form" onSubmit="{{ submitQuote }}" style="display:grid;grid-template-columns:1fr max-content;gap:16px;margin-bottom:16px">
+          <form class="email-form" data-form="quote" onSubmit="{{ submitQuote }}" style="display:grid;grid-template-columns:1fr max-content;gap:16px;margin-bottom:16px">
             <input type="email" required placeholder="Enter your email" value="{{ email }}" onChange="{{ setEmail }}" style="padding:10px 12px;border-radius:12px;border:1px solid #E2D9CD;background:#FFFFFF;color:#2A2724;outline:none;min-width:0" style-focus="border-color:#1E3B2C">
-            <button type="submit" style="padding:10px 24px;border-radius:12px;background:#1E3B2C;color:#FFFFFF;font-weight:500;border:1px solid transparent;cursor:pointer;transition:all .2s" style-hover="background:#2F5943">{{ quoteLabel }}</button>
+            <button type="submit" style="padding:10px 24px;border-radius:12px;background:#1E3B2C;color:#FFFFFF;font-weight:500;border:1px solid transparent;cursor:pointer;transition:all .2s" style-hover="background:#2F5943" data-done="Thanks — we\'ll be in touch">{{ quoteLabel }}</button>
           </form>
           <p style="font-size:12px">By clicking Get quote you agree to our terms and conditions.</p>
         </div>
@@ -312,9 +316,9 @@ input::placeholder{color:#5D564E}
         <p>Get practical home maintenance tips and project updates from our family</p>
       </div>
       <div class="news-box" style="min-width:400px;max-width:480px">
-        <form class="email-form" onSubmit="{{ submitNews }}" style="display:grid;grid-template-columns:1fr max-content;gap:16px;margin-bottom:12px">
+        <form class="email-form" data-form="news" onSubmit="{{ submitNews }}" style="display:grid;grid-template-columns:1fr max-content;gap:16px;margin-bottom:12px">
           <input type="email" required placeholder="Enter your email" value="{{ newsEmail }}" onChange="{{ setNewsEmail }}" style="padding:8px 12px;border-radius:12px;border:1px solid #E2D9CD;background:#FFFFFF;color:#2A2724;outline:none;min-width:0" style-focus="border-color:#1E3B2C">
-          <button type="submit" style="padding:8px 20px;border-radius:12px;background:#EDF1ED;color:#2A2724;font-weight:500;border:1px solid transparent;cursor:pointer" style-hover="background:#E2D9CD">{{ newsLabel }}</button>
+          <button type="submit" style="padding:8px 20px;border-radius:12px;background:#EDF1ED;color:#2A2724;font-weight:500;border:1px solid transparent;cursor:pointer" style-hover="background:#E2D9CD" data-done="Subscribed">{{ newsLabel }}</button>
         </form>
         <p style="font-size:12px">By subscribing you agree to with our Privacy Policy</p>
       </div>

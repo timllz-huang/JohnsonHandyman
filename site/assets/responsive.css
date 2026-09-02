@@ -14,8 +14,9 @@ img,svg,video{max-width:100%}
   .nav-grid{grid-template-columns:1fr auto auto !important;gap:12px !important}
   .nav-desktop{display:none !important}
   .nav-toggle{display:inline-flex !important}
+  .more-wrap{display:none !important}
   .nav-cta{padding:8px 16px !important}
-  .nav-mobile{display:flex !important;grid-column:1 / -1}
+  .nav-mobile:not([hidden]){display:flex !important;grid-column:1 / -1}
   .nav-mobile .m-link{padding:14px 4px;font-size:18px;border-bottom:1px solid #EFE9E0}
   .nav-mobile .m-actions{display:flex;gap:12px;padding-top:16px}
   .nav-mobile .m-actions a{flex:1;justify-content:center}

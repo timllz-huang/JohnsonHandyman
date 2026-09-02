@@ -10,6 +10,8 @@
 <helmet>
 <title>Services — Johnson Property Solutions</title>
 <link rel="icon" href="assets/mark.svg">
+<link rel="canonical" href="https://timllz-huang.github.io/JohnsonHandyman/site/services/">
+<meta name="robots" content="noindex,follow">
 <link rel="stylesheet" href="assets/responsive.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,13 +40,13 @@ input::placeholder{color:#5D564E}
       <a href="about.dc.html" style="padding:8px 16px;font-size:16px">About</a>
       <a href="services.dc.html" style="padding:8px 16px;font-size:16px;color:#1E3B2C;font-weight:600">Services</a>
       <a href="projects.dc.html" style="padding:8px 16px;font-size:16px">Projects</a>
-      <div style="position:relative" onMouseEnter="{{ openMore }}" onMouseLeave="{{ closeMore }}">
-        <button onClick="{{ openMore }}" aria-haspopup="true" aria-expanded="{{ moreOpen }}" style="display:flex;align-items:center;gap:8px;padding:8px 16px;background:none;border:0;cursor:pointer;color:#2A2724;font-size:16px">
+      <div class="more-wrap" style="position:relative" onMouseEnter="{{ openMore }}" onMouseLeave="{{ closeMore }}">
+        <button class="more-btn" onClick="{{ openMore }}" aria-haspopup="true" aria-expanded="{{ moreOpen }}" style="display:flex;align-items:center;gap:8px;padding:8px 16px;background:none;border:0;cursor:pointer;color:#2A2724;font-size:16px">
           <span>More</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition:transform .3s;transform:{{ moreIconTransform }}"><path d="M6 9l6 6 6-6"></path></svg>
         </button>
         <sc-if value="{{ moreOpen }}" hint-placeholder-val="{{ false }}">
-          <div style="position:absolute;top:100%;left:0;background:#FAF7F2;border:1px solid #E2D9CD;border-radius:12px;padding:8px;min-width:180px;display:flex;flex-direction:column">
+          <div class="more-menu" style="position:absolute;top:100%;left:0;background:#FAF7F2;border:1px solid #E2D9CD;border-radius:12px;padding:8px;min-width:180px;display:flex;flex-direction:column">
             <a href="reviews.dc.html" style="display:block;padding:8px 16px;font-size:16px;border-radius:8px" style-hover="background:#FFFFFF">Reviews</a>
             <a href="faq.dc.html" style="display:block;padding:8px 16px;font-size:16px;border-radius:8px" style-hover="background:#FFFFFF">FAQ</a>
             <a href="contact.dc.html" style="display:block;padding:8px 16px;font-size:16px;border-radius:8px" style-hover="background:#FFFFFF">Contact</a>
@@ -76,7 +78,7 @@ input::placeholder{color:#5D564E}
 
 
 <section data-screen-label="Header" style="background:#FAF7F2;padding:112px 5%">
-<div style="max-width:1280px;margin:0 auto"><div style="max-width:768px;margin:0 auto;text-align:center"><p style="font-weight:600;margin-bottom:16px;color:#A0673B">Services</p><h1 style="font-size:clamp(44px,6vw,72px);line-height:1.1;margin-bottom:24px">What we do</h1><p style="font-size:18px">One family team for the big builds and the small fixes around your home.</p><div class="btn-row" style="margin-top:32px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:center"><a href="contact.dc.html" style="display:inline-flex;padding:10px 24px;border-radius:12px;background:#1E3B2C;color:#FFFFFF;font-weight:500;border:1px solid transparent;transition:all .2s" style-hover="background:#2F5943;color:#FFFFFF">Get a quote</a><a href="#home-care" style="display:inline-flex;padding:10px 24px;border-radius:12px;background:#EDF1ED;color:#2A2724;font-weight:500;border:1px solid transparent;transition:all .2s" style-hover="background:#E2D9CD;color:#2A2724">Home care</a></div></div></div>
+<div style="max-width:1280px;margin:0 auto"><div style="max-width:768px;margin:0 auto;text-align:center"><p style="font-weight:600;margin-bottom:16px;color:#A0673B">Services</p><h1 style="font-size:clamp(44px,6vw,72px);line-height:1.1;margin-bottom:24px">Handyman and building services in Western Sydney</h1><p style="font-size:18px">One family team for the big builds and the small fixes around your home.</p><div class="btn-row" style="margin-top:32px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:center"><a href="contact.dc.html" style="display:inline-flex;padding:10px 24px;border-radius:12px;background:#1E3B2C;color:#FFFFFF;font-weight:500;border:1px solid transparent;transition:all .2s" style-hover="background:#2F5943;color:#FFFFFF">Get a quote</a><a href="#home-care" style="display:inline-flex;padding:10px 24px;border-radius:12px;background:#EDF1ED;color:#2A2724;font-weight:500;border:1px solid transparent;transition:all .2s" style-hover="background:#E2D9CD;color:#2A2724">Home care</a></div></div></div>
 </section>
 
 <section id="major" data-screen-label="Major works" style="background:#FFFFFF;padding:112px 5%">
@@ -107,9 +109,9 @@ input::placeholder{color:#5D564E}
         <p>Get practical home maintenance tips and project updates from our family</p>
       </div>
       <div class="news-box" style="min-width:400px;max-width:480px">
-        <form class="email-form" onSubmit="{{ submitNews }}" style="display:grid;grid-template-columns:1fr max-content;gap:16px;margin-bottom:12px">
+        <form class="email-form" data-form="news" onSubmit="{{ submitNews }}" style="display:grid;grid-template-columns:1fr max-content;gap:16px;margin-bottom:12px">
           <input type="email" required placeholder="Enter your email" value="{{ newsEmail }}" onChange="{{ setNewsEmail }}" style="padding:8px 12px;border-radius:12px;border:1px solid #E2D9CD;background:#FFFFFF;color:#2A2724;outline:none;min-width:0" style-focus="border-color:#1E3B2C">
-          <button type="submit" style="padding:8px 20px;border-radius:12px;background:#EDF1ED;color:#2A2724;font-weight:500;border:1px solid transparent;cursor:pointer" style-hover="background:#E2D9CD">{{ newsLabel }}</button>
+          <button type="submit" style="padding:8px 20px;border-radius:12px;background:#EDF1ED;color:#2A2724;font-weight:500;border:1px solid transparent;cursor:pointer" style-hover="background:#E2D9CD" data-done="Subscribed">{{ newsLabel }}</button>
         </form>
         <p style="font-size:12px">By subscribing you agree to with our Privacy Policy</p>
       </div>
