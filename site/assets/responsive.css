@@ -1,0 +1,77 @@
+/* Johnson Property Solutions — responsive layer.
+   Pages are written with inline styles (dc-runtime), so every rule here uses !important
+   to win over the inline desktop values at smaller viewports. Breakpoints:
+   ≤900px tablet / hamburger nav, ≤640px phone, ≤480px small phone. */
+
+body{overflow-x:clip}
+img,svg,video{max-width:100%}
+.nav-toggle{display:none}
+.nav-mobile{display:none}
+
+/* ---------- Tablet & below ---------- */
+@media (max-width:900px){
+  /* Header: logo | Quote | hamburger, mobile menu drops below */
+  .nav-grid{grid-template-columns:1fr auto auto !important;gap:12px !important}
+  .nav-desktop{display:none !important}
+  .nav-toggle{display:inline-flex !important}
+  .nav-cta{padding:8px 16px !important}
+  .nav-mobile{display:flex !important;grid-column:1 / -1}
+  .nav-mobile .m-link{padding:14px 4px;font-size:18px;border-bottom:1px solid #EFE9E0}
+  .nav-mobile .m-actions{display:flex;gap:12px;padding-top:16px}
+  .nav-mobile .m-actions a{flex:1;justify-content:center}
+
+  /* Section rhythm */
+  section[data-screen-label],footer[data-screen-label]{padding:72px 5% !important}
+  section[data-screen-label="Hero"]{padding:32px 5% !important}
+  .sec-head{margin-bottom:48px !important}
+
+  /* Every two-column layout stacks */
+  .g2{grid-template-columns:1fr !important;gap:32px !important}
+  .g2.card-2{gap:0 !important}
+  .card-2 > img{height:auto !important;aspect-ratio:4 / 3 !important;order:-1}
+  .card-2.cta-card > img{order:1;aspect-ratio:16 / 9 !important}
+  .gallery{grid-template-columns:1fr 1fr !important;grid-template-rows:auto !important;gap:16px !important}
+  .gallery-main{grid-row:auto !important;grid-column:1 / -1 !important}
+  .gallery-main img{aspect-ratio:16 / 10 !important;height:auto !important}
+  .news-box{min-width:0 !important;width:100%}
+}
+
+/* ---------- Phone ---------- */
+@media (max-width:640px){
+  section[data-screen-label],footer[data-screen-label]{padding:56px 5% !important}
+  section[data-screen-label="Hero"]{padding:16px 4% !important}
+  .hero-inner{padding:48px 20px !important;min-height:440px !important}
+  .sec-head{margin-bottom:36px !important}
+
+  h1[style*="clamp"]{font-size:36px !important}
+  h2[style*="clamp"]{font-size:30px !important}
+  h3[style*="clamp"]{font-size:26px !important}
+  h3[style*="36px"]{font-size:28px !important}
+  h3[style*="28px"]{font-size:23px !important}
+  p[style*="clamp"]{font-size:52px !important}          /* stat numbers */
+
+  .span2{grid-column:auto !important}
+  .pad-48{padding:28px 22px !important}
+  .pad-40{padding:24px 20px !important}
+  .form-2{grid-template-columns:1fr !important}
+  .loc-btn{padding:16px 0 16px 20px !important}
+  .btn-row{gap:12px !important}
+  .btn-row > a{flex:1 1 auto;justify-content:center}
+  .footer-cols{gap:32px 24px !important;margin-bottom:48px !important}
+  .footer-news{margin-bottom:48px !important}
+}
+
+/* ---------- Small phone ---------- */
+@media (max-width:480px){
+  .email-form{grid-template-columns:1fr !important;gap:12px !important}
+  .email-form button{width:100%}
+  .gallery{grid-template-columns:1fr !important}
+  .hero-inner{min-height:400px !important;padding:40px 16px !important}
+  h1[style*="clamp"]{font-size:32px !important}
+  .stars svg{width:20px;height:20px}
+}
+
+/* Touch devices: no sticky hover colour on buttons */
+@media (hover:none){
+  a,button{-webkit-tap-highlight-color:transparent}
+}

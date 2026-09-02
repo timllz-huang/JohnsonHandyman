@@ -2,6 +2,11 @@
 
 Static site, no build step.
 
+## Layout
+Pages use inline styles (dc-runtime). `assets/responsive.css` is the mobile/tablet layer: it targets the
+`class` hooks on the pages (`g2`, `card-2`, `gallery`, `hero-inner`, `nav-*`, ...) with `!important` so it wins over
+the inline desktop values below 900px / 640px / 480px. The header has a hamburger menu (`menuOpen` state) on ≤900px.
+
 ## Deploy (free, ~2 minutes)
 1. Go to https://app.netlify.com/drop
 2. Drag this whole folder onto the page
