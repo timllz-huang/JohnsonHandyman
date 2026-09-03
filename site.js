@@ -8,7 +8,9 @@
   var cfg = window.__SITE || {};
   var MAIL_TO = window.__MAIL_TO || cfg.formMailTo || "linjiansun@yahoo.com";
   var ZH = /^zh/i.test(document.documentElement.lang);
-  var T = ZH ? { open: "打开菜单", close: "关闭菜单", area: " 服务区域", sent: "已发送" } : { open: "Open menu", close: "Close menu", area: " service area", sent: "Sent" };
+  var T = ZH
+    ? { open: "打开菜单", close: "关闭菜单", area: " 服务区域", sent: "已发送", tooBig: "照片总大小超过 10MB，请少选几张或改发邮件至 " }
+    : { open: "Open menu", close: "Close menu", area: " service area", sent: "Sent", tooBig: "Those photos add up to more than 10MB. Please pick fewer, or email them to " };
 
   /* Mobile menu */
   var toggle = $(".nav-toggle"), mobile = $(".nav-mobile");
@@ -62,6 +64,8 @@
   }
 
   /* Forms */
+  var MAX_UPLOAD = 10 * 1024 * 1024;              /* FormSubmit's total attachment ceiling */
+
   function sendMail(subject, fields) {
     var body = Object.assign({ _subject: subject, _template: "table", _captcha: "false" }, fields);
     return fetch("https://formsubmit.co/ajax/" + MAIL_TO, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(body) })
@@ -73,17 +77,49 @@
         return false;
       });
   }
+
+  /* The quote form posts natively (multipart) so photo attachments reach the inbox —
+     the AJAX relay cannot carry files. FormSubmit sends the visitor back via _next. */
+  var quoteForm = $('form[data-form="contact"]');
+  function showThanks() {
+    var thanks = $(".form-thanks");
+    if (quoteForm) quoteForm.setAttribute("hidden", "");
+    if (thanks) { thanks.removeAttribute("hidden"); thanks.scrollIntoView({ behavior: "smooth", block: "center" }); }
+  }
+  if (quoteForm) {
+    quoteForm.setAttribute("action", "https://formsubmit.co/" + MAIL_TO);
+    quoteForm.setAttribute("method", "POST");
+    quoteForm.setAttribute("enctype", "multipart/form-data");
+    [["_subject", "New quote request from website"], ["_template", "table"], ["_captcha", "false"],
+     ["_next", location.origin + location.pathname + "?sent=1"]].forEach(function (pair) {
+      var i = document.createElement("input");
+      i.type = "hidden"; i.name = pair[0]; i.value = pair[1];
+      quoteForm.appendChild(i);
+    });
+    var fileInput = $('input[type=file]', quoteForm), hint = $(".file-hint", quoteForm);
+    quoteForm.addEventListener("submit", function (e) {
+      var total = 0;
+      if (fileInput && fileInput.files) {
+        for (var i = 0; i < fileInput.files.length; i++) total += fileInput.files[i].size;
+      }
+      if (total > MAX_UPLOAD) {                    /* stop it here rather than let the post fail */
+        e.preventDefault();
+        if (hint) { hint.textContent = T.tooBig + MAIL_TO; hint.style.color = "#A0673B"; hint.style.fontWeight = "600"; }
+        if (fileInput) fileInput.focus();
+      }
+      /* otherwise: no preventDefault — the browser posts the form, files included */
+    });
+    if (new URLSearchParams(location.search).get("sent")) showThanks();
+  }
+
+  /* The small email-capture forms stay on the AJAX relay: no files, no page change */
   $$("form[data-form]").forEach(function (form) {
+    if (form.dataset.form === "contact") return;
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var kind = form.dataset.form, btn = $("button[type=submit]", form);
       var fd = new FormData(form), fields = {}; fd.forEach(function (v, k) { fields[k] = v; });
       fields.page = location.pathname;
-      if (kind === "contact") {
-        sendMail("New quote request from website", fields);
-        form.setAttribute("hidden", ""); var thanks = $(".form-thanks"); if (thanks) { thanks.removeAttribute("hidden"); thanks.scrollIntoView({ behavior: "smooth", block: "center" }); }
-        return;
-      }
       var emailInput = $("input[type=email]", form); if (emailInput) fields.email = emailInput.value;
       sendMail(kind === "news" ? "Newsletter signup" : "Quote request — " + document.title, fields);
       if (btn) { btn.textContent = btn.dataset.done || T.sent; btn.disabled = true; }
