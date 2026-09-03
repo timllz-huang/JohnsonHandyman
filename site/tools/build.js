@@ -107,10 +107,11 @@ const mergePseudo = pseudoStyles;
 /* ---------- 4. per-page build ---------- */
 const pages = Object.entries(cfg.pages);
 const urlFor = p => BASE + p;
-function cleanLinks(html, rel) {
+function cleanLinks(html, rel, langPath) {
+  // internal links stay inside the current language: zh pages link to zh pages
   for (const [name, pg] of pages) {
     const re = new RegExp('(href|action)="' + name + '\\.dc\\.html', "g");
-    html = html.replace(re, '$1="' + ((rel + pg.path) || "./"));
+    html = html.replace(re, '$1="' + ((rel + (langPath || "") + pg.path) || "./"));
   }
   html = html.replace(/(href|src)="assets\//g, '$1="' + rel + "assets/").replace(/url\("assets\//g, 'url("' + rel + "assets/");
   return html;
@@ -159,7 +160,7 @@ function buildPage(name, pg, code) {
   body = body.replace(/\s+on[A-Z]\w*="[^"]*"/g, "");                   // React-style handlers
   body = body.replace(/\s+hint-placeholder-\w+="[^"]*"/g, "");
   const ps = mergePseudo(body); body = ps.html;
-  body = cleanLinks(body, rel);
+  body = cleanLinks(body, rel, L ? L.path : "");
   if (cfg.licence || cfg.abn) {
     const extra = [cfg.licence && "NSW Contractor Licence " + esc(cfg.licence), cfg.abn && "ABN " + esc(cfg.abn)].filter(Boolean).join(" · ");
     body = body.replace(/(© \d{4} Johnson Property Solutions\. All rights reserved\.<\/p>)/, "$1\n        <p>" + extra + "</p>");
