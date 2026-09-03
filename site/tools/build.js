@@ -135,6 +135,7 @@ function businessSchema(L) {
     ].map(([n, u]) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: n, url: BASE + u, areaServed: "Western Sydney, NSW" } })) }
   };
   if (cfg.address.postcode) b.address.postalCode = cfg.address.postcode;
+  if (cfg.abn) b.taxID = "ABN " + cfg.abn;
   if (cfg.sameAs && cfg.sameAs.length) b.sameAs = cfg.sameAs;
   return b;
 }

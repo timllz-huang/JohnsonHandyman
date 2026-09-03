@@ -6,7 +6,7 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var cfg = window.__SITE || {};
-  var MAIL_TO = window.__MAIL_TO || cfg.formMailTo || "timllz83@gmail.com";
+  var MAIL_TO = window.__MAIL_TO || cfg.formMailTo || "linjiansun@yahoo.com";
   var ZH = /^zh/i.test(document.documentElement.lang);
   var T = ZH ? { open: "打开菜单", close: "关闭菜单", area: " 服务区域", sent: "已发送" } : { open: "Open menu", close: "Close menu", area: " service area", sent: "Sent" };
 
